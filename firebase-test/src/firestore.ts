@@ -1,21 +1,20 @@
-import type firebase from 'firebase/app';
+import { collection, Firestore, getDocs, addDoc } from '@firebase/firestore';
+import type { TodoItem } from './types/TodoItem';
 
-let db: firebase.Firestore = null;
+export const getTodos = async (firestore: Firestore) => {
+	const publicCollection = collection(firestore, 'public');
+	const snapshot = await getDocs(publicCollection);
+	const row = snapshot.docs.map((value) => value.data());
+	return row;
+};
 
-export async function firestore(): Promise<firebase.firestore.
-Firestore> {
-    if (db) {
-        return db;
-    } 
+export const addTodo = async (firestore: Firestore, todo: TodoItem) => {
+	const publicCollection = collection(firestore, 'public');
 
-    // Checks for the client
-    if (typeof window !== 'undefined') {
-        const fb = (await import('firebase/app')).default;
-
-        db = fb.firestore();
-        return db;
-    }
-
-    const fb = await import('firebase');
-    return fb.apps[0].firestore() as firebase.firestore.Firestore;
-}
+	try {
+		const ref = await addDoc(publicCollection, todo);
+		console.log(`Added todo item with id ${ref.id}`);
+	} catch (error) {
+		console.log(`Could not create todo item: ${error}`);
+	}
+};
