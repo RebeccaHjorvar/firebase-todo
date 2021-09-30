@@ -1,12 +1,12 @@
 <script>
-import { null_to_empty } from "svelte/internal";
-
-
-
+                                        // VARIABLES //
     let todos = [];
     let task = '';
     let error = '';
 
+                                        // FUNCTIONS //
+
+    // Checks if input is empty, adds a new todo{} to todos[] and clears input field
     const addTask = () => {
         let todo = {
             task: task,
@@ -18,12 +18,13 @@ import { null_to_empty } from "svelte/internal";
             todos = [...todos, todo]
             task = ''
         }
-        else
+        else // stops user from adding an empty task
         {
             error = 'Task is empty'
         }
     }
 
+    // Adds a task if user presses the enter key
     const enterKeyPressed = (event) => {
         if ( event.key === 'Enter' ){
             addTask()
@@ -34,14 +35,18 @@ import { null_to_empty } from "svelte/internal";
         }
     }
 
+    // Changes status of the chosen task
     const done = (index) => {
         todos[index].status = !todos[index].status
     }
 
+    // Removes the chosen task
     const removeTask = (index) => {
         const remove = todos[index]
         todos = todos.filter((todo) => todo != remove)
     }
+
+    // Creates an alert to stop user from unexpectedly deleting all tasks
     const alerter = () => {
         
         if (confirm("Press OK to delete all tasks")) {
