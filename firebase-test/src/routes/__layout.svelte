@@ -1,16 +1,20 @@
-<script context='module'>
-    import { initFirebase } from '../initFirebase';
+<script context="module">
+	import { initFirebase } from '../initFirebase';
+	import { getTodos } from '../firestore';
+	import { firestore } from '../stores/fireStore';
 
-    export async function load({ page, fetch, session, context }) {
-        await initFirebase();
-        return {
-            props: {},
-        };
-    }
+	export async function load({ page, fetch, session, context }) {
+		const store = await initFirebase();
+		firestore.set(store);
+
+		return {
+			props: {}
+		};
+	}
 </script>
 
 <script>
-    import "../app.postcss";
-    
+	import '../app.postcss';
 </script>
-<slot></slot>
+
+<slot />
